@@ -8,12 +8,18 @@ Group:          Development/Libraries
 License:        Commercial
 URL:            http://www.vmware.com/support/developer/viperltoolkit/
 Source0:        VMware-VIPerl-%{realversion}.x86_64.tar.gz
+AutoReq:        no
+
+
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
 BuildRequires:  perl(ExtUtils::MakeMaker) , perl(Class::MethodMaker), perl(Crypt::SSLeay), perl(SOAP::Lite), perl(XML::LibXML)
 Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
-Requires:       perl(Archive::Zip), perl(Data::Dump), perl(TypeInfo), perl(UUID)       
+Requires:       perl(Archive::Zip), perl(Data::Dump)
+
+#TODO Install applications 
+# configure apps for /etc/ usage
 
 
 %description
@@ -29,6 +35,9 @@ find . -type f -name \*.pl -or -name \*.pm -or -name \*.txt -or -name \*.xml -or
 rm -f vmware-install.pl
 #Change so that things are not 755 all over
 find . -type f -exec chmod 644 {} \;
+
+
+
 
 %build
 %{__perl} Makefile.PL INSTALLDIRS=vendor 
@@ -51,6 +60,23 @@ mkdir -p $RPM_BUILD_ROOT/
 #Change so that things are not 755 all over
 find $RPM_BUILD_ROOT -type f -exec chmod 644 {} \;
 
+# Install things in the applicaitons directory
+mkdir -p $RPM_BUILD_ROOT/%{_libexecdir}/%{name}
+pushd apps
+ # Don't install AppUtil, as we already have 
+ # also, sampledata and schema are configuration files, they belong in etc
+ls | egrep -v 'AppUtil|sampledata|schema' | while read dir;  do
+  mkdir -p $RPM_BUILD_ROOT/%{_libexecdir}/%{name}/$dir
+  pushd $dir
+  install  -p -m755 * $RPM_BUILD_ROOT/%{_libexecdir}/%{name}/$dir
+  popd
+done 
+mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/%{name}/schema
+pushd schema
+  install -p -m644 * $RPM_BUILD_ROOT/%{_sysconfdir}/%{name}/schema
+popd
+popd
+
 
 %check
 #make test
@@ -62,11 +88,12 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc doc readme.html Changes EULA.txt sdkpubs.css
+%doc doc readme.html Changes EULA.txt sdkpubs.css apps/sampledata
 %{perl_vendorlib}/*
 %{_mandir}/man3/*.3*
+%{_libexecdir}/%{name}
 #%{_bindir}/*
-#%config(noreplace) %{_sysconfdir}/vmware
+%config(noreplace) %{_sysconfdir}/%{name}
 
 %changelog
 * Fri Feb 14 2009 <stahnma@fedoraproject.org> - 1.6.0_104313-1
