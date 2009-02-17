@@ -14,9 +14,10 @@ AutoReq:        no
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
-BuildRequires:  perl(ExtUtils::MakeMaker) , perl(Class::MethodMaker), perl(Crypt::SSLeay), perl(SOAP::Lite), perl(XML::LibXML)
+# Perl(UUID) not available in Fedora/EPEL (due to license) see my git -- stahnma
+BuildRequires:  perl(ExtUtils::MakeMaker) , perl(Class::MethodMaker), perl(Crypt::SSLeay), perl(SOAP::Lite), perl(XML::LibXML), perl(UUID)
 Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
-Requires:       perl(Archive::Zip), perl(Data::Dump)
+Requires:       perl(Archive::Zip), perl(Data::Dump), perl(UUID)
 
 #TODO Install applications 
 # configure apps for /etc/ usage
@@ -37,11 +38,10 @@ rm -f vmware-install.pl
 find . -type f -exec chmod 644 {} \;
 
 
-
-
 %build
 %{__perl} Makefile.PL INSTALLDIRS=vendor 
 make %{?_smp_mflags}
+
 
 %install
 rm -rf $RPM_BUILD_ROOT
