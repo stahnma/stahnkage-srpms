@@ -1,11 +1,11 @@
 Name:           oracle-instantclient                                                                                              
 Version:        10.2.0.4                                                                                                          
-Release:        1%{?dist}                                                                                                         
+Release:        2%{?dist}                                                                                                         
 Summary:        Virtual Package for Oracle Instantclients                                                                         
 
 Group:          Applications/Databases
 License:        BSD
-URL:            http://github.com/stahnma/stahnkage-srpms
+URL:            http://github.com/stahnma/stahnkage-srpms/oracle-instantclient
 Source0:        README.oracleinstantclient
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -30,5 +30,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.oracleinstantclient
 
 %changelog
+* Fri May 08 2009 <stahnma@fedoraproject.org> - 10.2.0.4-2
+- Updated URL
+
 * Fri May 08 2009 <stahnma@fedoraproject.org> - 10.2.0.4-1
 - Initial Package
