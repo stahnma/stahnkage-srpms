@@ -1,0 +1,12 @@
+This package is just a placeholder that requires 
+* oracle-instantclient-basic
+* oracle-instantclient-devel
+* oracle-instantclient-sqlplus
+
+It also provides libclntsh.so.10 because the oracle rpm 
+does not for some reason.  Any packages that build against
+Oracle for connectors (php-pecl-oci8, perl-DBD-Oracle, etc) 
+normally require this lib.  This package will provide.
+
+For more information or bugs/issues:
+  http://github.com/stahnma/stahnkage-srpms/
