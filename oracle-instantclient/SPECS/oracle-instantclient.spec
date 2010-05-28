@@ -1,6 +1,6 @@
 Name:           oracle-instantclient                                                                                              
 Version:        11.2.0.1.0                                                                                                    
-Release:        1%{?dist}                                                                                                         
+Release:        2%{?dist}                                                                                                         
 Summary:        Virtual Package for Oracle Instantclients                                                                         
 
 Group:          Applications/Databases
@@ -9,11 +9,11 @@ URL:            http://github.com/stahnma/stahnkage-srpms/oracle-instantclient
 Source0:        README.oracleinstantclient
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Requires:       oracle-instantclient-basic>10
-Requires:       oracle-instantclient-devel>10
-Requires:       oracle-instantclient-sqlplus>10
-Requires:       oracle-instantclient-jdbc>10
-Requires:       oracle-instantclient-odbc>10
+Requires:       oracle-instantclient-basic >= 11
+Requires:       oracle-instantclient-devel >= 11
+Requires:       oracle-instantclient-sqlplus >= 11
+Requires:       oracle-instantclient-jdbc >= 11
+Requires:       oracle-instantclient-odbc >= 11
 
 BuildArch:      noarch
 # The whole purpose of this RPM is to provide this library.  The Oracle instantclient
@@ -41,6 +41,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.oracleinstantclient
 
 %changelog
+* Fri May 28 2010 <stahnma@fedoraproject.org> - 11.2.0.1.0-2
+- Dep issue.
+
 * Thu May 27 2010 <stahnma@fedoraproject.org> - 11.2.0.1.0-1
 - Updated package for 11g.
 
