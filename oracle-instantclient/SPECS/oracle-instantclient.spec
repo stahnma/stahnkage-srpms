@@ -1,6 +1,6 @@
 Name:           oracle-instantclient                                                                                              
 Version:        11.2.0.1.0                                                                                                    
-Release:        3%{?dist}                                                                                                         
+Release:        4%{?dist}                                                                                                         
 Summary:        Virtual Package for Oracle Instantclients                                                                         
 
 Group:          Applications/Databases
@@ -19,7 +19,7 @@ BuildArch:      noarch
 # The whole purpose of this RPM is to provide this library.  The Oracle instantclient
 #   rpms *should*, however, they don't.  So, I wrote a provider dummy RPM.
 # This is useful for things like perl-DBI-oracle, php-pecl-oci8, ruby-oci8, etc
-Provides:       libclntsh.so = 11.1
+Provides:       libclntsh.so.11.1
 
 %description
 Provides the libclntsh.so to the RPM database.
@@ -35,12 +35,14 @@ rm -rf $RPM_BUILD_ROOT
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-
 %files
 %defattr(-,root,root,-)
 %doc README.oracleinstantclient
 
 %changelog
+* Wed Jul 07 2010 <stahnma@fedoraproject.org> - 11.2.0.1.0-4
+- Specific version for libclntsh.so needed
+
 * Fri May 28 2010 <stahnma@fedoraproject.org> - 11.2.0.1.0-3
 - Fixing versioning
 
