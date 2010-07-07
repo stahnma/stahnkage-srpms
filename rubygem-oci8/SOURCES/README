@@ -1,0 +1,2 @@
+When you run 'make srpm' one directory level up from here, you 
+should get the SOURCES directory populated.
