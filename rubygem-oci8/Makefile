@@ -1,7 +1,7 @@
 NAME=rubygem-oci8
 SPEC_FILE=SPECS/$(NAME).spec
 SOURCE_FILE=ruby-oci8-*.gem
-SOURCE_URL=http://rubyforge.org/frs/download.php/65899/ruby-oci8-1.0.7.gem
+SOURCE_URL=http://rubyforge.org/frs/download.php/65899/ruby-oci8-2.0.4.gem
 
 RPMBUILD := $(shell if test -f /usr/bin/rpmbuild ; then echo /usr/bin/rpmbuild ; else echo "x" ; fi)
 

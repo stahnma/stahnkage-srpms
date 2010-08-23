@@ -13,7 +13,7 @@
 
 Summary: Ruby interface for Oracle using OCI8 API
 Name: rubygem-%{gemname}
-Version: 1.0.7
+Version: 2.0.4
 Release: 1%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
@@ -23,12 +23,22 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 # You will need to get oracle-instantclient11.2 packages from oracle.com
 Requires: rubygems, ruby(abi) >= 1.8
 Requires: oracle-instantclient >= 11.2
-BuildRequires: rubygems, oracle-instantclient11.2-basic, oracle-instantclient11.2-devel
+BuildRequires: rubygems, oracle-instantclient11.2-basic, oracle-instantclient11.2-devel, gcc
 Provides: rubygem(%{gemname}) = %{version}
+Provides: rubygem(%{realgemname}) = %{version}
 
 %description
 rubygem-oci8 is a ruby interface for Oracle using OCI8 API. It is available with
 Oracle8, Oracle8i, Oracle9i, Oracle10g, Oracle11g and Oracle Instant Client.
+
+%package doc
+Summary:           Documentation for %{name}
+Group:             Documentation
+Requires:          %{name} = %{version}-%{release}
+
+%description doc
+Documentation for %{name}.
+
 
 %prep 
 %setup -q -c -T
@@ -36,48 +46,48 @@ Oracle8, Oracle8i, Oracle9i, Oracle10g, Oracle11g and Oracle Instant Client.
 %build
 mkdir -p ./%{gemdir}
 export CONFIGURE_ARGS="--with-cflags='%{optflags}'"
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/oracle/11.2/client/lib/
-gem install -V --local --install-dir ./%{gemdir} \
-            --force --rdoc %{SOURCE0}
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:%{_libdir}/oracle/11.2/client/lib/
+gem install -V --local --install-dir ./%{gemdir}  --rdoc %{SOURCE0}
 
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{gemdir}
 cp -a .%{gemdir}/* %{buildroot}%{gemdir}
 mkdir -p %{buildroot}%{ruby_sitearchdir}
-# Remove duplicate copy of oci8lib.so
-rm -f /usr/lib/ruby/gems/1.8/gems/ruby-oci8-1.0.7/ext/oci8/oci8lib.so
-# Put so file in proper directory
-mv %{buildroot}%{geminstdir}/lib/oci8lib.so %{buildroot}%{ruby_sitearchdir}
 # Remove ext source code
 rm -rf %{buildroot}%{geminstdir}/ext/
+# Remove some un-needed files
+rm -rf %{buildroot}%{geminstdir}/lib/.document
+rm -rf %{buildroot}%{geminstdir}/lib/oci8/.document
+rm -rf %{buildroot}%{geminstdir}/ruby-oci8.gemspec
 
 %clean
 rm -rf %{buildroot}
 
 %files
 %defattr(-, root, root, -)
-%doc %{gemdir}/doc/%{realgemname}-%{version}
 %doc %{geminstdir}/README
 %doc %{geminstdir}/ChangeLog
 %doc %{geminstdir}/NEWS
 %doc %{geminstdir}/VERSION
 %doc %{geminstdir}/Makefile
-%doc %{gemdir}/gems/%{realgemname}-%{version}/doc
-%doc %{geminstdir}/test
-%doc %{geminstdir}/support
 %dir %{gemdir}/gems/%{realgemname}-%{version}/
-%{ruby_sitearchdir}/*.so
-%{geminstdir}/*.gemspec
-%{geminstdir}/dist-files
-%{geminstdir}/lib
-%{geminstdir}/metaconfig
-%{geminstdir}/pre-distclean.rb
-%{geminstdir}/*.spec
-%{gemdir}/gems/%{realgemname}-%{version}/setup.rb
 %{gemdir}/cache/%{realgemname}-%{version}.gem
-%{gemdir}/specifications/*.gemspec
+%{geminstdir}/lib
+%{geminstdir}/dist-files
+%{geminstdir}/metaconfig
+%{geminstdir}/*.rb
+%{gemdir}/specifications/ruby-oci8-2.0.4.gemspec
+
+%files doc
+%defattr(-, root, root, -)
+%{geminstdir}/test
+%{gemdir}/gems/%{realgemname}-%{version}/doc
+%{gemdir}/doc/%{realgemname}-%{version}
 
 %changelog
+* Mon Aug 23 2010  <stahnma@fedoraproject.org> - 2.0.4-1
+- Version change
+
 * Tue Jul 06 2010  <stahnma@fedoraproject.org> - 1.0.7-1
 - Initial package
